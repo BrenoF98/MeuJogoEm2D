@@ -5,13 +5,17 @@ import java.awt.image.BufferedImage;
 public class Entidade {
     public int x, y; // posição
     public int velocidade; // velocidade
+    public boolean marcadorDireita = true; 
+
 
     // --- VARIÁVEIS DE FÍSICA PARA O PULO ---
     public double velY = 0;              // Velocidade vertical
     public final double GRAVIDADE = 0.8;  // Força puxando para baixo
-    public final double FORCA_PULO = -13; // Impulso para cima (negativo sobe no Java 2D)
+    public final double FORCA_PULO = -10; // Impulso para cima (negativo sobe no Java 2D)
     public final int CHAO_Y = 100;       // Posição inicial / altura do chão
     public boolean estaNoAr = false;     // Evita pulos infinitos no ar
+    
+
     
 
     public BufferedImage // banco de imagem

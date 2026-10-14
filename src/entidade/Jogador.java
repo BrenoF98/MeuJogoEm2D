@@ -13,7 +13,6 @@ public class Jogador extends Entidade {
 
     TelaDeJogo tj; // devine nome para o metodo da tela
     KeyHandler tecla; // Define nome para o metodo das teclas
-    int yAtual;
 
     public Jogador(TelaDeJogo tj, KeyHandler tecla) {
 
@@ -28,7 +27,7 @@ public class Jogador extends Entidade {
 
         x = 100;
         y = CHAO_Y; // Define a posição inicial Y exatamente no chão
-        velocidade = 4;
+        velocidade = 4; // velocidade do jogador de caminhada.
         direcao = "sentandaDireita";
 
     }
@@ -63,54 +62,75 @@ public class Jogador extends Entidade {
         if (tecla.paraCima == true && (direcao.equals("emPeDireita") || direcao.equals("deitadaDireita"))) {
             direcao = "sentandaDireita";
 
+            marcadorDireita = true; // flag para indicar direção. 
+
         } else if (tecla.paraCima == true && (direcao.equals("emPeEsquerda") || direcao.equals("deitadaEsquerda"))) {
 
             direcao = "sentadaEsquerda";
+
+            marcadorDireita = false;
+
         }
 
         if (tecla.paraBaixo == true && (direcao.equals("emPeDireita") || direcao.equals("sentandaDireita"))) {
             direcao = "deitadaDireita";
 
+            marcadorDireita = true;
+
         } else if (tecla.paraBaixo == true && (direcao.equals("emPeEsquerda") || direcao.equals("sentadaEsquerda"))) {
             direcao = "deitadaEsquerda";
+
+            marcadorDireita = false;
+
         }
 
-        // define o gato como em pé indica se chegar no fim da tela que reaparece do
+        // define o gato como em pé e indica se chegar no fim da tela deve reaparece do
         // outro lado.
         if (tecla.paraEsquerda == true) {
             x -= velocidade;
             direcao = "emPeEsquerda";
+
+            marcadorDireita = false;
             if (x == 0 - tj.tamanhoBloco) {
                 x = 768 + tj.tamanhoBloco;
             }
         } else if (tecla.paraDireita == true) {
             x += velocidade;
             direcao = "emPeDireita";
+            marcadorDireita = true;
+
             if (x == 768 + tj.tamanhoBloco) {
                 x = 0 - tj.tamanhoBloco;
             }
         }
 
         // --- LÓGICA DO PULO E GRAVIDADE ---
-        // 1. Detecta o comando de pulo quando está no chão
+        // Detecta o comando de pulo quando está no chão
         if (tecla.pular && !estaNoAr) {
+            if (marcadorDireita == false) {
+                direcao = "emPeEsquerda";
+            } else if (marcadorDireita == true) {
+
+                direcao = "emPeDireita";
+            }
+
             velY = FORCA_PULO; // Aplica a força inicial para subir
             estaNoAr = true;
         }
 
-        // 2. Aplica a velocidade atual na posição Y
+        // Aplica a velocidade atual na posição Y
         y += velY;
 
-        // 3. Aplica a gravidade continuamente se estiver no ar
+        // Aplica a gravidade continuamente se estiver no ar
         if (estaNoAr) {
             velY += GRAVIDADE;
         }
 
-        // 4. Detecção de colisão com o chão
+        // Detecção de colisão com o chão
         if (y >= CHAO_Y) {
-            y = CHAO_Y;        // Mantém o jogador exatamente sobre o chão
-            velY = 0;          // Zera a velocidade vertical
-            estaNoAr = false;  // Libera para poder pular de novo
+            y = CHAO_Y; // Mantém o jogador exatamente sobre o chão
+            velY = 0; // Zera a velocidade vertical
+            estaNoAr = false; // Libera para poder pular de novo
         }
     }
 
@@ -122,7 +142,7 @@ public class Jogador extends Entidade {
 
         BufferedImage image = null;
 
-        // decisão que faz mostrar a imagem correta. 
+        // decisão que faz mostrar a imagem correta.
 
         switch (direcao) {
             case "emPeEsquerda":
@@ -150,7 +170,8 @@ public class Jogador extends Entidade {
                 break;
         }
 
-        g2.drawImage(image, x, y, tj.tamanhoBloco, tj.tamanhoBloco, null); // define onde vede ser mostrado no quadro e suas dimenções. 
+        g2.drawImage(image, x, y, tj.tamanhoBloco, tj.tamanhoBloco, null); // define onde vede ser mostrado no quadro e
+                                                                           // suas dimenções.
 
     }
 
